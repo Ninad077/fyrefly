@@ -1,4 +1,4 @@
-from fyrefly import add, mul, div
+from fyrefly import add, mul, div, mod
 
 
 def test_add():
@@ -16,3 +16,9 @@ def test_mul():
 def test_div():
     assert div(100, 5, 2) == 10.0
     assert div(9) == 9
+
+
+def test_mod():
+    assert mod(17, 5) == 2
+    assert mod(100, 9) == 1
+    assert mod(9) == 9

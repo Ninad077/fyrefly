@@ -35,3 +35,21 @@ def div(*nos):
     for n in nos[1:]:
         res = res / n
     return res
+
+
+def mod(*nos):
+    """Finds the remainder in sequence: first % second % third ...
+
+    Example:
+        mod(17, 5) -> 2
+
+    Raises:
+        ValueError: if no numbers are passed.
+        ZeroDivisionError: if any number after the first is zero.
+    """
+    if not nos:
+        raise ValueError("mod() requires at least one number")
+    res = nos[0]
+    for n in nos[1:]:
+        res = res % n
+    return res
