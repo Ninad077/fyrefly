@@ -1,6 +1,6 @@
 # Fyrefly
 
-Simple, flexible functions to add, multiply, and divide **any count of numbers**.
+Simple, flexible functions to add, multiply, divide, and find the remainder of **any count of numbers**.
 
 ## Installation
 
@@ -11,11 +11,12 @@ pip install fyrefly
 ## Usage
 
 ```python
-from fyrefly import add, mul, div
+from fyrefly import add, mul, div, mod
 
 add(5, 4, 6, 10)     # 25
 mul(5, 4, 6, 10)     # 1200
 div(100, 5, 2)       # 10.0
+mod(17, 5)           # 2
 ```
 
 Each function accepts any number of arguments:
@@ -33,6 +34,7 @@ mul()                  # 1 (identity)
 | `add(*nos)` | Adds all given numbers |
 | `mul(*nos)` | Multiplies all given numbers |
 | `div(*nos)` | Divides left to right: first ÷ second ÷ third ... |
+| `mod(*nos)` | Finds remainder left to right: first % second % third ... |
 
 ## Development
 
