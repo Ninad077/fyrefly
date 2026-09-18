@@ -3,4 +3,4 @@
 from .core import add, mul, div, mod
 
 __all__ = ["add", "mul", "div", "mod"]
-__version__ = "0.2.0"
+__version__ = "0.2.1"   

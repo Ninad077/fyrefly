@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "fyrefly"
-version = "0.2.0"
-description = "Simple, flexible functions to add, multiply, and divide any count of numbers"
+version = "0.2.1"   
+description = "A quant based library to compute mathematical operations"
 readme = "README.md"
 requires-python = ">=3.9"
 license = { text = "MIT" }
