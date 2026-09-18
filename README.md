@@ -1,6 +1,6 @@
 # Fyrefly
 
-Simple, flexible functions to add, multiply, divide, and find the remainder of **any count of numbers**.
+A Quant based library to compute mathematical operations.
 
 ## Installation
 
