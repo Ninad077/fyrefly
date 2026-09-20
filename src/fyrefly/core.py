@@ -6,6 +6,23 @@ def add(*nos):
     """
     return sum(nos)
 
+def diff(*nos):
+    """Subtracts numbers in sequence: first - second - third ...
+
+    Example:
+        diff(10, 3) -> 7
+        diff(10, 3, 2) -> 5
+
+    Raises:
+        ValueError: if no numbers are passed.
+    """
+    if not nos:
+        raise ValueError("diff() requires at least one number")
+    res = nos[0]
+    for n in nos[1:]:
+        res = res - n
+    return res
+
 
 def mul(*nos):
     """Multiplies any count of numbers passed as separate arguments.

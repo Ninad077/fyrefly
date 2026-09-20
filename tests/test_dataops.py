@@ -1,6 +1,6 @@
 import os
 import pandas as pd
-from fyrefly import load, loadh, loadc, loads, sql, xtract
+from fyrefly import load, loadh, loadc, loads, sql, xtract, clean
 
 
 def _make_sample_csv(tmp_path):
@@ -50,3 +50,16 @@ def test_xtract(tmp_path, monkeypatch):
     d = sql("select * from c where salary > 70000")
     out_path = xtract(d, filename="output.csv")
     assert os.path.exists(out_path)
+
+
+def test_clean_strips_and_dedupes():
+    messy = pd.DataFrame({
+        " Name ": ["  Alice ", "Bob", "Bob", None],
+        "Department": ["Engineering ", " Sales", " Sales", None],
+        "Salary": [85000, 62000, 62000, None],
+    })
+    cleaned = clean(messy)
+    assert list(cleaned.columns) == ["name", "department", "salary"]
+    assert len(cleaned) == 2
+    assert cleaned.iloc[0]["name"] == "Alice"
+    assert cleaned.iloc[0]["department"] == "Engineering"

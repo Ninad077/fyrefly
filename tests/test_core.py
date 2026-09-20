@@ -1,10 +1,17 @@
-from fyrefly import add, mul, div, mod
+from fyrefly import add, mul, div, mod, diff
 
 
 def test_add():
     assert add(5, 4, 6, 10) == 25
     assert add() == 0
     assert add(7) == 7
+
+
+def test_diff():
+    assert diff(10, 3) == 7
+    assert diff(10, 3, 2) == 5
+    assert diff(2, 3) == -1
+    assert diff(7) == 7
 
 
 def test_mul():

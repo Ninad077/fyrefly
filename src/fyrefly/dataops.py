@@ -130,3 +130,53 @@ def loads(df):
     print("Schema:")
     print(schema)
     return schema
+
+# Cleans the dataframe
+def clean(df, lowercase_columns=True, strip_strings=True, drop_duplicates=True, drop_empty_rows=True):
+    """
+    Performs common cleanup on a DataFrame and previews what changed:
+      - Standardizes column names (lowercase, spaces -> underscores)
+      - Strips leading/trailing whitespace from text columns
+      - Drops exact duplicate rows
+      - Drops rows that are entirely empty (all NaN)
+
+    Returns a NEW cleaned DataFrame (does not modify the original in place).
+
+    Example:
+        c = load("messy_data.csv")
+        c = clean(c)
+    """
+    original_shape = df.shape
+    df = df.copy()
+
+    if lowercase_columns:
+        df.columns = [str(c).strip().lower().replace(" ", "_") for c in df.columns]
+
+    if strip_strings:
+        str_cols = df.select_dtypes(include="object").columns
+        for col in str_cols:
+            df[col] = df[col].apply(lambda x: x.strip() if isinstance(x, str) else x)
+
+    duplicates_removed = 0
+    if drop_duplicates:
+        before = len(df)
+        df = df.drop_duplicates()
+        duplicates_removed = before - len(df)
+
+    empty_rows_removed = 0
+    if drop_empty_rows:
+        before = len(df)
+        df = df.dropna(how="all")
+        empty_rows_removed = before - len(df)
+
+    print(f"Cleaned: {original_shape} -> {df.shape}")
+    if lowercase_columns:
+        print(" - Standardized column names (lowercase, underscores)")
+    if strip_strings:
+        print(" - Stripped whitespace from text columns")
+    if duplicates_removed:
+        print(f" - Removed {duplicates_removed} duplicate row(s)")
+    if empty_rows_removed:
+        print(f" - Removed {empty_rows_removed} fully empty row(s)")
+
+    return df
