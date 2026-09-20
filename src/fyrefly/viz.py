@@ -1,6 +1,6 @@
 import os
 import matplotlib
-matplotlib.use("Agg")  # safe default for headless environments; interactive use still works via plt.show()
+# matplotlib.use("Agg")  # safe default for headless environments; interactive use still works via plt.show()
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
