@@ -1,18 +1,19 @@
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
 [project]
 name = "fyrefly"
-version = "0.2.1"   
-description = "A quant based library to compute mathematical operations"
+version = "0.3.0"
+description = "A quant-based library to compute mathematical operations and run SQL queries on your data."
 readme = "README.md"
 requires-python = ">=3.9"
 license = { text = "MIT" }
 authors = [
     { name = "Your Name", email = "you@example.com" }
 ]
-keywords = ["math", "arithmetic", "quant", "utility"]
+keywords = ["math", "arithmetic", "quant", "utility", "sql", "pandas"]
+dependencies = [
+    "pandas",
+    "duckdb",
+    "openpyxl",
+]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
@@ -25,8 +26,8 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/yourusername/fyrefly"
-Repository = "https://github.com/yourusername/fyrefly"
+Homepage = "https://github.com/Ninad077/fyrefly"
+Repository = "https://github.com/Ninad077/fyrefly"
 
 [project.optional-dependencies]
 dev = ["pytest>=7.0"]
