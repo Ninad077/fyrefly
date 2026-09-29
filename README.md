@@ -32,7 +32,7 @@ diff(10, 3)            # 7
 ## Usage — Quant formulas
 
 ```python
-from fyrefly import si, ci, si_ci_diff, profit, loss, ap, gp, hp, avg, avgc, mode, median, hyp, slope, centroid
+from fyrefly import si, ci, si_ci_diff, profit, loss, ap, gp, hp, avg, avgc, mode, median, hyp, slope, centroid, dist
 
 # Interest
 si(1000, 2, 5)                    # 100.0   (Simple Interest: p, n, r)
@@ -70,6 +70,43 @@ median(1, 2, 3, 4)        # 2.5
 hyp(3, 4)                              # 5.0
 slope((1, 2), (3, 4))                  # 1.0
 centroid((1, 2), (3, 2), (4, 5))       # (2.6666666666666665, 3.0)
+dist((6, 2), (10, 5))                  # 5.0
+```
+
+## Usage — Equations, logs, exponents, roots, trigonometry
+
+```python
+from fyrefly import eqn, log, exp, sqrt, curt, nroot, sin, cos, tan, cosec, sec, cot
+
+# Linear systems — n equations, n unknowns. Each equation: (coefficients..., constant)
+eqn.l((2, 3, 5), (7, 6, 10))                          # (x, y) solving 2x+3y=5, 7x+6y=10
+eqn.l((1, 1, 1, 6), (2, -1, 1, 3), (1, 2, -1, 2))     # (a, b, c) — scales to any n unknowns
+
+# Polynomial roots — any degree, plus sum/product of roots (Vieta's formulas)
+eqn.q(1, 3, 4)              # roots of x^2 + 3x + 4 = 0
+eqn.q(3, 4, 6, 9, 10)       # roots of 3x^4 + 4x^3 + 6x^2 + 9x + 10 = 0
+eqn.q.sum(5, 2, 3)          # -0.4   sum of roots of 5x^2 + 2x + 3 = 0
+eqn.q.mul(5, 2, 3)          # 0.6    product of roots
+
+# Logs and exponents
+log(math.e)          # 1.0   natural log by default
+log(8, 2)             # 3.0   log base 2
+exp(2, 5)             # 32    2 to the power 5
+exp(2, -1)            # 0.5   negative exponents work too
+
+# Roots
+sqrt(16)              # 4.0
+curt(27)              # 3.0
+curt(-27)             # -3.0   odd roots of negative numbers work correctly
+nroot(16, 2)          # 4.0    generic nth root
+
+# Trigonometry — degrees by default, pass mode="rad" for radians
+sin(30)               # 0.5
+cos(60)               # 0.5
+tan(45)               # 1.0
+cosec(30)             # 2.0
+sec(60)               # 2.0
+cot(45)               # 1.0
 ```
 
 ## Usage — Data functions
@@ -186,6 +223,14 @@ If more than one DataFrame is loaded, the shortcut can't guess which one you mea
 | `hyp(a, b)` | Hypotenuse of a right triangle | No |
 | `slope(point1, point2)` | Slope between two (x, y) points | No |
 | `centroid(p1, p2, p3)` | Centroid of a triangle from three (x, y) points | No |
+| `dist(point1, point2)` | Distance between two (x, y) points | No |
+| `eqn.l(*equations)` | Solves a system of n linear equations in n unknowns | No |
+| `eqn.q(*coeffs)` | Roots of a polynomial of any degree | No |
+| `eqn.q.sum(*coeffs)` / `eqn.q.mul(*coeffs)` | Sum / product of all roots (Vieta's formulas), any degree | No |
+| `log(x, base=e)` | Logarithm, natural by default | No |
+| `exp(a, b)` | a raised to the power b (positive or negative) | No |
+| `sqrt(no)` / `curt(no)` / `nroot(no, n)` | Square root / cube root / generic nth root | No |
+| `sin/cos/tan/cosec/sec/cot(angle, mode="deg")` | Trigonometric functions, degrees by default | No |
 | `load(path)` | Loads a CSV/Excel/Google Sheet into a DataFrame and previews it | No |
 | `loadh(df)` | Previews just the column headers | No |
 | `loadc(df)` | Previews the record count | No |

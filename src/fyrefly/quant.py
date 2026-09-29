@@ -1,5 +1,6 @@
 import statistics
 import math
+import numpy as np
 
 
 # ---------------------------------------------------------------------------
@@ -97,7 +98,7 @@ def loss(sp, cp, pct=None):
 
 
 # ---------------------------------------------------------------------------
-# Sequences: AP, GP, HP — callable for the full sequence, .tn()/.sn() for one term / sum
+# Sequences: AP, GP, HP — callable for the full sequence, .tn() for one term
 # ---------------------------------------------------------------------------
 
 class _AP:
@@ -106,12 +107,10 @@ class _AP:
 
     Call directly for the full sequence: ap(a, d, n) -> list of n terms.
     Use .tn() for just the nth term: ap.tn(a, d, n) -> single value.
-    Use .sn() for the sum of the first n terms: ap.sn(a, d, n) -> single value.
 
     Example:
         ap(2, 3, 4)      -> [2, 5, 8, 11]
         ap.tn(2, 3, 4)   -> 11
-        ap.sn(2, 3, 4)   -> 26
     """
 
     def __call__(self, a, d, n):
@@ -136,12 +135,10 @@ class _GP:
 
     Call directly for the full sequence: gp(a, r, n) -> list of n terms.
     Use .tn() for just the nth term: gp.tn(a, r, n) -> single value.
-    Use .sn() for the sum of the first n terms: gp.sn(a, r, n) -> single value.
 
     Example:
         gp(2, 3, 4)      -> [2, 6, 18, 54]
         gp.tn(2, 3, 4)   -> 54
-        gp.sn(2, 3, 4)   -> 80
     """
 
     def __call__(self, a, r, n):
@@ -169,7 +166,6 @@ class _HP:
 
     Call directly for the full sequence: hp(a, d, n) -> list of n terms.
     Use .tn() for just the nth term: hp.tn(a, d, n) -> single value.
-    Use .sn() for the sum of the first n terms: hp.sn(a, d, n) -> single value.
 
     Example:
         hp(2, 3, 4)      -> [2.0, 0.2857142857142857, 0.15384615384615385, 0.10526315789473684]
@@ -299,3 +295,208 @@ def centroid(point1, point2, point3):
     x2, y2 = point2
     x3, y3 = point3
     return ((x1 + x2 + x3) / 3, (y1 + y2 + y3) / 3)
+
+
+def dist(point1, point2):
+    """Distance between two (x, y) coordinate tuples:
+    sqrt((x2 - x1)**2 + (y2 - y1)**2)
+
+    Example:
+        dist((6, 2), (10, 5)) -> 5.0
+    """
+    x1, y1 = point1
+    x2, y2 = point2
+    return math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
+
+
+# ---------------------------------------------------------------------------
+# Equations: linear systems and polynomial roots
+# ---------------------------------------------------------------------------
+
+class _EqnQ:
+    """
+    Quadratic/polynomial equation solver — callable for the roots of any
+    degree polynomial, with .sum() and .mul() for the sum and product of
+    all roots (Vieta's formulas), also valid for any degree.
+
+    Coefficients are given from the highest degree down to the constant.
+
+    Example:
+        eqn.q(1, 3, 4)          -> roots of x^2 + 3x + 4 = 0
+        eqn.q(3, 4, 6, 9, 10)   -> roots of 3x^4 + 4x^3 + 6x^2 + 9x + 10 = 0
+        eqn.q.sum(5, 2, 3)      -> -0.4   (sum of roots of 5x^2 + 2x + 3 = 0)
+        eqn.q.mul(5, 2, 3)      -> 0.6    (product of roots)
+    """
+
+    def __call__(self, *coeffs):
+        if len(coeffs) < 2:
+            raise ValueError("eqn.q() needs at least 2 coefficients (e.g. a, b for ax + b = 0)")
+        roots = np.roots(coeffs)
+        return tuple(roots)
+
+    def sum(self, *coeffs):
+        """Sum of all roots (Vieta's formula): -coeffs[1] / coeffs[0]"""
+        if len(coeffs) < 2:
+            raise ValueError("eqn.q.sum() needs at least 2 coefficients")
+        return -coeffs[1] / coeffs[0]
+
+    def mul(self, *coeffs):
+        """Product of all roots (Vieta's formula): (-1)^degree * constant / leading coefficient"""
+        if len(coeffs) < 2:
+            raise ValueError("eqn.q.mul() needs at least 2 coefficients")
+        degree = len(coeffs) - 1
+        return ((-1) ** degree) * coeffs[-1] / coeffs[0]
+
+
+class _Eqn:
+    """
+    Namespace for solving equations.
+
+    eqn.l(...)   — system of linear equations
+    eqn.q(...)   — polynomial roots (any degree), plus .sum()/.mul()
+    """
+
+    def __init__(self):
+        self.q = _EqnQ()
+
+    def l(self, *equations):
+        """
+        Solves a system of n linear equations in n unknowns.
+
+        Each equation is a tuple of (n + 1) numbers: the n coefficients
+        followed by the constant on the right-hand side. You need exactly
+        as many equations as unknowns.
+
+        Example — solving 2x + 3y = 5 and 7x + 6y = 10:
+            eqn.l((2, 3, 5), (7, 6, 10)) -> (x, y)
+
+        Example — 3 equations, 3 unknowns (a, b, c):
+            eqn.l((1, 1, 1, 6), (2, -1, 1, 3), (1, 2, -1, 2)) -> (a, b, c)
+        """
+        n = len(equations)
+        for eq in equations:
+            if len(eq) != n + 1:
+                raise ValueError(
+                    f"For {n} equations ({n} unknowns), each equation needs "
+                    f"{n + 1} numbers ({n} coefficients + 1 constant). "
+                    f"Got {len(eq)} in {eq}."
+                )
+        A = [eq[:-1] for eq in equations]
+        b = [eq[-1] for eq in equations]
+        solution = np.linalg.solve(A, b)
+        return tuple(solution)
+
+
+eqn = _Eqn()
+
+
+# ---------------------------------------------------------------------------
+# Logs, exponents, roots
+# ---------------------------------------------------------------------------
+
+def log(x, base=math.e):
+    """Logarithm of x. Natural log (base e) by default; pass a second
+    argument for a different base.
+
+    Example:
+        log(math.e) -> 1.0
+        log(8, 2) -> 3.0
+    """
+    return math.log(x, base)
+
+
+def exp(a, b):
+    """a raised to the power b. Works for positive and negative exponents.
+
+    Example:
+        exp(2, 5) -> 32
+        exp(2, -1) -> 0.5
+    """
+    return a ** b
+
+
+def nroot(no, n):
+    """The nth root of a number. Handles negative numbers correctly for
+    odd roots (e.g. cube root of a negative number is negative); raises
+    for even roots of a negative number, since that's not a real number.
+
+    Example:
+        nroot(16, 2) -> 4.0
+        nroot(27, 3) -> 3.0
+        nroot(-27, 3) -> -3.0
+    """
+    if no < 0:
+        if n % 2 == 0:
+            raise ValueError(f"Even root ({n}) of a negative number ({no}) is not a real number")
+        return -((-no) ** (1 / n))
+    return no ** (1 / n)
+
+
+def sqrt(no):
+    """Square root. Shortcut for nroot(no, 2).
+
+    Example:
+        sqrt(16) -> 4.0
+    """
+    return nroot(no, 2)
+
+
+def curt(no):
+    """Cube root. Shortcut for nroot(no, 3).
+
+    Example:
+        curt(27) -> 3.0
+    """
+    return nroot(no, 3)
+
+
+# ---------------------------------------------------------------------------
+# Trigonometry — angle in degrees by default; pass mode="rad" for radians
+# ---------------------------------------------------------------------------
+
+def _to_radians(angle, mode):
+    if mode == "deg":
+        return math.radians(angle)
+    elif mode == "rad":
+        return angle
+    else:
+        raise ValueError("mode must be 'deg' or 'rad'")
+
+
+def sin(angle, mode="deg"):
+    """Sine of an angle. Degrees by default; pass mode="rad" for radians."""
+    return math.sin(_to_radians(angle, mode))
+
+
+def cos(angle, mode="deg"):
+    """Cosine of an angle. Degrees by default; pass mode="rad" for radians."""
+    return math.cos(_to_radians(angle, mode))
+
+
+def tan(angle, mode="deg"):
+    """Tangent of an angle. Degrees by default; pass mode="rad" for radians."""
+    return math.tan(_to_radians(angle, mode))
+
+
+def cosec(angle, mode="deg"):
+    """Cosecant (1/sin) of an angle. Degrees by default."""
+    s = sin(angle, mode)
+    if s == 0:
+        raise ValueError("cosec() is undefined when sin(angle) is 0")
+    return 1 / s
+
+
+def sec(angle, mode="deg"):
+    """Secant (1/cos) of an angle. Degrees by default."""
+    c = cos(angle, mode)
+    if c == 0:
+        raise ValueError("sec() is undefined when cos(angle) is 0")
+    return 1 / c
+
+
+def cot(angle, mode="deg"):
+    """Cotangent (1/tan, or cos/sin) of an angle. Degrees by default."""
+    s = sin(angle, mode)
+    if s == 0:
+        raise ValueError("cot() is undefined when sin(angle) is 0")
+    return cos(angle, mode) / s

@@ -9,7 +9,9 @@ from .quant import (
     profit, loss,
     ap, gp, hp,
     avg, avgc, mode, median,
-    hyp, slope, centroid,
+    hyp, slope, centroid, dist,
+    eqn, log, exp, nroot, sqrt, curt,
+    sin, cos, tan, cosec, sec, cot,
 )
 
 __all__ = [
@@ -21,6 +23,8 @@ __all__ = [
     "profit", "loss",
     "ap", "gp", "hp",
     "avg", "avgc", "mode", "median",
-    "hyp", "slope", "centroid",
+    "hyp", "slope", "centroid", "dist",
+    "eqn", "log", "exp", "nroot", "sqrt", "curt",
+    "sin", "cos", "tan", "cosec", "sec", "cot",
 ]
-__version__ = "0.4.0"
+__version__ = "0.5.0"

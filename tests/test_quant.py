@@ -1,10 +1,13 @@
+import math
 import pytest
 from fyrefly import (
     si, ci, si_ci_diff,
     profit, loss,
     ap, gp, hp,
     avg, avgc, mode, median,
-    hyp, slope, centroid,
+    hyp, slope, centroid, dist,
+    eqn, log, exp, nroot, sqrt, curt,
+    sin, cos, tan, cosec, sec, cot,
 )
 
 
@@ -206,3 +209,118 @@ def test_centroid():
     result = centroid((1, 2), (3, 2), (4, 5))
     assert abs(result[0] - 2.6666666666666665) < 1e-9
     assert result[1] == 3.0
+
+
+def test_dist():
+    assert dist((6, 2), (10, 5)) == 5.0
+
+
+# ---------------------------------------------------------------------------
+# Equations
+# ---------------------------------------------------------------------------
+
+def test_eqn_l_two_unknowns():
+    x, y = eqn.l((2, 3, 5), (7, 6, 10))
+    assert abs(2 * x + 3 * y - 5) < 1e-9
+    assert abs(7 * x + 6 * y - 10) < 1e-9
+
+
+def test_eqn_l_three_unknowns():
+    a, b, c = eqn.l((1, 1, 1, 6), (2, -1, 1, 3), (1, 2, -1, 2))
+    assert abs(a - 1.0) < 1e-9
+    assert abs(b - 2.0) < 1e-9
+    assert abs(c - 3.0) < 1e-9
+
+
+def test_eqn_l_mismatched_size_raises():
+    with pytest.raises(ValueError):
+        eqn.l((1, 2), (3, 2))
+
+
+def test_eqn_q_quadratic_real_roots():
+    roots = eqn.q(1, -3, 2)
+    real_parts = sorted(r.real for r in roots)
+    assert abs(real_parts[0] - 1.0) < 1e-9
+    assert abs(real_parts[1] - 2.0) < 1e-9
+
+
+def test_eqn_q_quartic_returns_four_roots():
+    roots = eqn.q(3, 4, 6, 9, 10)
+    assert len(roots) == 4
+
+
+def test_eqn_q_sum():
+    assert abs(eqn.q.sum(5, 2, 3) - (-0.4)) < 1e-9
+
+
+def test_eqn_q_mul():
+    assert abs(eqn.q.mul(5, 2, 3) - 0.6) < 1e-9
+
+
+# ---------------------------------------------------------------------------
+# Log, exponent, roots
+# ---------------------------------------------------------------------------
+
+def test_log_natural():
+    assert abs(log(math.e) - 1.0) < 1e-9
+
+
+def test_log_with_base():
+    assert abs(log(8, 2) - 3.0) < 1e-9
+
+
+def test_exp_positive():
+    assert exp(2, 5) == 32
+
+
+def test_exp_negative():
+    assert exp(2, -1) == 0.5
+
+
+def test_sqrt():
+    assert sqrt(16) == 4.0
+
+
+def test_curt():
+    assert abs(curt(27) - 3.0) < 1e-9
+
+
+def test_curt_negative():
+    assert abs(curt(-27) - (-3.0)) < 1e-9
+
+
+def test_sqrt_negative_raises():
+    with pytest.raises(ValueError):
+        sqrt(-16)
+
+
+# ---------------------------------------------------------------------------
+# Trigonometry
+# ---------------------------------------------------------------------------
+
+def test_sin_degrees():
+    assert abs(sin(30) - 0.5) < 1e-9
+
+
+def test_cos_degrees():
+    assert abs(cos(60) - 0.5) < 1e-9
+
+
+def test_tan_degrees():
+    assert abs(tan(45) - 1.0) < 1e-9
+
+
+def test_cosec():
+    assert abs(cosec(30) - 2.0) < 1e-9
+
+
+def test_sec():
+    assert abs(sec(60) - 2.0) < 1e-9
+
+
+def test_cot():
+    assert abs(cot(45) - 1.0) < 1e-9
+
+
+def test_sin_radians_mode():
+    assert abs(sin(math.pi / 2, mode="rad") - 1.0) < 1e-9
