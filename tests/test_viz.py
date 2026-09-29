@@ -64,3 +64,69 @@ def test_viz_scatter_missing_y_raises():
         assert False, "should have raised without y"
     except ValueError:
         pass
+
+
+def test_viz_positional_xy_auto_picks_bar():
+    c = _sample_df()
+    fig = viz(c, "department", "salary")
+    assert fig is not None
+
+
+def test_viz_positional_xy_auto_picks_scatter():
+    c = _sample_df()
+    fig = viz(c, "age", "salary")
+    assert fig is not None
+
+
+def test_viz_namespace_bar_auto_detects_single_dataframe(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    c = _sample_df()
+    viz.bar("department", "salary", save="chart.png")
+    assert os.path.exists("chart.png")
+
+
+def test_viz_namespace_scatter_auto_detects(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    c = _sample_df()
+    viz.scatter("age", "salary", save="chart.png")
+    assert os.path.exists("chart.png")
+
+
+def test_viz_namespace_hist_single_column(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    c = _sample_df()
+    viz.hist("age", save="chart.png")
+    assert os.path.exists("chart.png")
+
+
+def test_viz_namespace_heatmap_no_columns_needed(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    c = _sample_df()
+    viz.heatmap(save="chart.png")
+    assert os.path.exists("chart.png")
+
+
+def test_viz_namespace_explicit_df_overrides_autodetect(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    c = _sample_df()
+    viz.bar(c, "department", "salary", save="chart.png")
+    assert os.path.exists("chart.png")
+
+
+def test_viz_namespace_scatter_missing_args_raises():
+    c = _sample_df()
+    try:
+        viz.scatter()
+        assert False, "should have raised without x and y"
+    except ValueError:
+        pass
+
+
+def test_viz_namespace_ambiguous_multiple_dataframes_raises():
+    c = _sample_df()
+    d = _sample_df()
+    try:
+        viz.bar("department", "salary")
+        assert False, "should have raised with multiple DataFrames in scope"
+    except ValueError as e:
+        assert "Multiple DataFrames" in str(e)
