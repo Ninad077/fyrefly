@@ -311,6 +311,8 @@ footer {
 <li><a href="#sequences">Sequences</a></li>
 <li><a href="#stats">Averages &amp; Statistics</a></li>
 <li><a href="#geometry">Geometry</a></li>
+<li><a href="#mensuration-2d">Mensuration — 2D Shapes</a></li>
+<li><a href="#mensuration-3d">Mensuration — 3D Shapes</a></li>
 <li><a href="#equations">Equations</a></li>
 <li><a href="#logs-roots">Logs, Exponents &amp; Roots</a></li>
 <li><a href="#trig">Trigonometry</a></li>
@@ -593,6 +595,306 @@ median(1, 2, 3, 4)
       <p class="fn-desc">Distance between two (x, y) tuples: √((x2−x1)² + (y2−y1)²).</p>
       <pre><code class="language-python">dist((6, 2), (10, 5))
 # 5.0</code></pre>
+    </article>
+    
+    </section>
+    
+
+    <section class="category" id="mensuration-2d">
+      <h2>Mensuration — 2D Shapes</h2>
+      <p class="cat-intro">Area and perimeter for every common 2D shape. Each shape is its own object with .area() and .perimeter() (or close variants) as methods.</p>
+      
+    <article class="fn-card" id="circle">
+      <h3 class="fn-sig"><code>circle.area(r)  ·  circle.perimeter(r)</code></h3>
+      <p class="fn-desc">Area and circumference of a circle.</p>
+      <pre><code class="language-python">circle.area(7)
+# 153.93804002589985
+
+circle.perimeter(7)
+# 43.982297150257104</code></pre>
+    </article>
+    
+
+    <article class="fn-card" id="semicircle">
+      <h3 class="fn-sig"><code>semicircle.area(r)  ·  semicircle.perimeter(r)</code></h3>
+      <p class="fn-desc">Area and perimeter (curved edge + diameter) of a semicircle.</p>
+      <pre><code class="language-python">semicircle.area(7)
+# 76.96902001294993
+
+semicircle.perimeter(7)
+# 35.99114857512855</code></pre>
+    </article>
+    
+
+    <article class="fn-card" id="square">
+      <h3 class="fn-sig"><code>square.area(s)  ·  square.perimeter(s)</code></h3>
+      <p class="fn-desc">Area and perimeter of a square.</p>
+      <pre><code class="language-python">square.area(5)
+# 25
+
+square.perimeter(5)
+# 20</code></pre>
+    </article>
+    
+
+    <article class="fn-card" id="rectangle">
+      <h3 class="fn-sig"><code>rectangle.area(l, w)  ·  rectangle.perimeter(l, w)</code></h3>
+      <p class="fn-desc">Area and perimeter of a rectangle.</p>
+      <pre><code class="language-python">rectangle.area(4, 6)
+# 24
+
+rectangle.perimeter(4, 6)
+# 20</code></pre>
+    </article>
+    
+
+    <article class="fn-card" id="triangle">
+      <h3 class="fn-sig"><code>triangle.area(base, height)  ·  triangle.area_sides(a, b, c)  ·  triangle.perimeter(a, b, c)</code></h3>
+      <p class="fn-desc">Area from base/height, area from all three sides via Heron's formula, and perimeter. Raises a clear error if the three sides can't form a real triangle.</p>
+      <pre><code class="language-python">triangle.area(10, 5)
+# 25.0
+
+triangle.area_sides(3, 4, 5)
+# 6.0
+
+triangle.perimeter(3, 4, 5)
+# 12</code></pre>
+    </article>
+    
+
+    <article class="fn-card" id="equilateral_triangle">
+      <h3 class="fn-sig"><code>equilateral_triangle.area(s)  ·  equilateral_triangle.perimeter(s)</code></h3>
+      <p class="fn-desc">Area and perimeter of an equilateral triangle from its side length.</p>
+      <pre><code class="language-python">equilateral_triangle.area(4)
+# 6.928203230275509
+
+equilateral_triangle.perimeter(4)
+# 12</code></pre>
+    </article>
+    
+
+    <article class="fn-card" id="parallelogram">
+      <h3 class="fn-sig"><code>parallelogram.area(base, height)  ·  parallelogram.perimeter(a, b)</code></h3>
+      <p class="fn-desc">Area and perimeter of a parallelogram.</p>
+      <pre><code class="language-python">parallelogram.area(10, 5)
+# 50
+
+parallelogram.perimeter(10, 5)
+# 30</code></pre>
+    </article>
+    
+
+    <article class="fn-card" id="rhombus">
+      <h3 class="fn-sig"><code>rhombus.area(d1, d2)  ·  rhombus.perimeter(s)</code></h3>
+      <p class="fn-desc">Area from the two diagonals, and perimeter from the side length.</p>
+      <pre><code class="language-python">rhombus.area(6, 8)
+# 24.0
+
+rhombus.perimeter(5)
+# 20</code></pre>
+    </article>
+    
+
+    <article class="fn-card" id="kite">
+      <h3 class="fn-sig"><code>kite.area(d1, d2)  ·  kite.perimeter(a, b)</code></h3>
+      <p class="fn-desc">Area from the two diagonals, and perimeter from the two distinct side lengths.</p>
+      <pre><code class="language-python">kite.area(6, 8)
+# 24.0
+
+kite.perimeter(5, 7)
+# 24</code></pre>
+    </article>
+    
+
+    <article class="fn-card" id="trapezoid">
+      <h3 class="fn-sig"><code>trapezoid.area(a, b, height)  ·  trapezoid.perimeter(a, b, c, d)</code></h3>
+      <p class="fn-desc">Area from the two parallel sides and height, and perimeter from all four sides.</p>
+      <pre><code class="language-python">trapezoid.area(8, 5, 4)
+# 26.0
+
+trapezoid.perimeter(8, 5, 3, 4)
+# 20</code></pre>
+    </article>
+    
+
+    <article class="fn-card" id="ellipse">
+      <h3 class="fn-sig"><code>ellipse.area(a, b)  ·  ellipse.perimeter(a, b)</code></h3>
+      <p class="fn-desc">Area is exact. Perimeter uses Ramanujan's approximation — extremely accurate, since no exact closed-form formula exists for an ellipse's perimeter.</p>
+      <pre><code class="language-python">ellipse.area(5, 3)
+# 47.12388980384689
+
+ellipse.perimeter(5, 3)
+# ~25.5 (approximate)</code></pre>
+    </article>
+    
+
+    <article class="fn-card" id="polygon">
+      <h3 class="fn-sig"><code>polygon.area(n_sides, length)  ·  polygon.perimeter(n_sides, length)</code></h3>
+      <p class="fn-desc">Area and perimeter of any regular polygon, given its number of sides and side length.</p>
+      <pre><code class="language-python">polygon.area(6, 4)
+# area of a regular hexagon
+
+polygon.perimeter(6, 4)
+# 24</code></pre>
+    </article>
+    
+
+    <article class="fn-card" id="sector">
+      <h3 class="fn-sig"><code>sector.area(r, angle)  ·  sector.arc_length(r, angle)</code></h3>
+      <p class="fn-desc">Area and arc length of a circular sector. Angle is in degrees.</p>
+      <pre><code class="language-python">sector.area(7, 90)
+# 38.48451000647496
+
+sector.arc_length(7, 90)
+# 10.995574287564276</code></pre>
+    </article>
+    
+
+    <article class="fn-card" id="annulus">
+      <h3 class="fn-sig"><code>annulus.area(outer_r, inner_r)</code></h3>
+      <p class="fn-desc">Area of a ring shape — the area between two concentric circles.</p>
+      <pre><code class="language-python">annulus.area(10, 6)
+# 201.06192982974676</code></pre>
+    </article>
+    
+    </section>
+    
+
+    <section class="category" id="mensuration-3d">
+      <h2>Mensuration — 3D Shapes</h2>
+      <p class="cat-intro">Volume and surface area for every common 3D shape. Surface area is split into .tsa() (Total Surface Area, every face combined), .csa() (Curved Surface Area, curved part only — for shapes with a genuine curve), and .lsa() (Lateral Surface Area, side faces only — for flat-sided shapes). Sphere and Torus use plain .surface_area() instead, since there's nothing to disambiguate on those two.</p>
+      
+    <article class="fn-card" id="cube">
+      <h3 class="fn-sig"><code>cube.volume(s)  ·  cube.lsa(s)  ·  cube.tsa(s)</code></h3>
+      <p class="fn-desc">Volume, lateral surface area (4 side faces), and total surface area (all 6 faces) of a cube.</p>
+      <pre><code class="language-python">cube.volume(3)
+# 27
+
+cube.lsa(3)
+# 36
+
+cube.tsa(3)
+# 54</code></pre>
+    </article>
+    
+
+    <article class="fn-card" id="cuboid">
+      <h3 class="fn-sig"><code>cuboid.volume(l, w, h)  ·  cuboid.lsa(l, w, h)  ·  cuboid.tsa(l, w, h)</code></h3>
+      <p class="fn-desc">Volume, lateral surface area, and total surface area of a cuboid.</p>
+      <pre><code class="language-python">cuboid.volume(2, 3, 4)
+# 24
+
+cuboid.lsa(2, 3, 4)
+# 40
+
+cuboid.tsa(2, 3, 4)
+# 52</code></pre>
+    </article>
+    
+
+    <article class="fn-card" id="sphere">
+      <h3 class="fn-sig"><code>sphere.volume(r)  ·  sphere.surface_area(r)</code></h3>
+      <p class="fn-desc">Volume and surface area of a sphere. No TSA/CSA split — the whole surface is uniform.</p>
+      <pre><code class="language-python">sphere.volume(3)
+# 113.09733552923254
+
+sphere.surface_area(3)
+# 113.09733552923255</code></pre>
+    </article>
+    
+
+    <article class="fn-card" id="hemisphere">
+      <h3 class="fn-sig"><code>hemisphere.volume(r)  ·  hemisphere.csa(r)  ·  hemisphere.tsa(r)</code></h3>
+      <p class="fn-desc">Volume, curved surface area (dome only), and total surface area (dome + flat base) of a hemisphere.</p>
+      <pre><code class="language-python">hemisphere.volume(3)
+# 56.54866776461627
+
+hemisphere.csa(3)
+# 56.548667764616276
+
+hemisphere.tsa(3)
+# 84.82300164692441</code></pre>
+    </article>
+    
+
+    <article class="fn-card" id="cylinder">
+      <h3 class="fn-sig"><code>cylinder.volume(r, h)  ·  cylinder.csa(r, h)  ·  cylinder.tsa(r, h)</code></h3>
+      <p class="fn-desc">Volume, curved surface area (side only), and total surface area (side + both circular ends) of a cylinder.</p>
+      <pre><code class="language-python">cylinder.volume(3, 7)
+# 197.92033717615698
+
+cylinder.csa(3, 7)
+# 131.94689145077132
+
+cylinder.tsa(3, 7)
+# 188.49555921538757</code></pre>
+    </article>
+    
+
+    <article class="fn-card" id="cone">
+      <h3 class="fn-sig"><code>cone.volume(r, h)  ·  cone.csa(r, h)  ·  cone.tsa(r, h)</code></h3>
+      <p class="fn-desc">Volume, curved surface area, and total surface area of a cone. Slant height is computed internally from r and h.</p>
+      <pre><code class="language-python">cone.volume(3, 4)
+# 37.69911184307752
+
+cone.csa(3, 4)
+# 47.12388980384689 (slant height = 5)
+
+cone.tsa(3, 4)
+# 75.39822368615503</code></pre>
+    </article>
+    
+
+    <article class="fn-card" id="frustum">
+      <h3 class="fn-sig"><code>frustum.volume(r1, r2, h)  ·  frustum.csa(r1, r2, h)  ·  frustum.tsa(r1, r2, h)</code></h3>
+      <p class="fn-desc">Volume, curved surface area, and total surface area of a frustum (a cone with the tip cut off). Slant height is computed internally.</p>
+      <pre><code class="language-python">frustum.volume(3, 5, 6)
+# 307.8760800517997
+
+frustum.csa(3, 5, 6)
+# 158.95341225273762
+
+frustum.tsa(3, 5, 6)
+# 265.76756247479057</code></pre>
+    </article>
+    
+
+    <article class="fn-card" id="pyramid">
+      <h3 class="fn-sig"><code>pyramid.volume(s, h)  ·  pyramid.lsa(s, h)  ·  pyramid.tsa(s, h)</code></h3>
+      <p class="fn-desc">Square-based pyramid. h is the vertical height — slant height for the triangular faces is computed internally.</p>
+      <pre><code class="language-python">pyramid.volume(6, 8)
+# 96.0
+
+pyramid.lsa(6, 8)
+# 102.52804494381036
+
+pyramid.tsa(6, 8)
+# 138.52804494381036</code></pre>
+    </article>
+    
+
+    <article class="fn-card" id="prism">
+      <h3 class="fn-sig"><code>prism.volume(base_area, h)  ·  prism.lsa(base_perimeter, h)  ·  prism.tsa(base_area, base_perimeter, h)</code></h3>
+      <p class="fn-desc">General prism of any base shape — described by its base area and base perimeter, rather than a specific shape.</p>
+      <pre><code class="language-python">prism.volume(20, 10)
+# 200
+
+prism.lsa(18, 10)
+# 180
+
+prism.tsa(20, 18, 10)
+# 220</code></pre>
+    </article>
+    
+
+    <article class="fn-card" id="torus">
+      <h3 class="fn-sig"><code>torus.volume(R, r)  ·  torus.surface_area(R, r)</code></h3>
+      <p class="fn-desc">Volume and surface area of a torus (donut shape). R is the distance from the tube's center to the torus's center; r is the tube's own radius. No TSA/CSA split — the whole surface is uniform.</p>
+      <pre><code class="language-python">torus.volume(5, 2)
+# 394.78417604357435
+
+torus.surface_area(5, 2)
+# 394.78417604357435</code></pre>
     </article>
     
     </section>

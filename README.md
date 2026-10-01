@@ -75,6 +75,32 @@ centroid((1, 2), (3, 2), (4, 5))       # (2.6666666666666665, 3.0)
 dist((6, 2), (10, 5))                  # 5.0
 ```
 
+## Usage — Mensuration (2D & 3D shapes)
+
+```python
+from fyrefly import circle, square, triangle, cube, sphere, cylinder, cone
+
+# 2D — area and perimeter
+circle.area(7)                      # 153.93804002589985
+circle.perimeter(7)                 # 43.982297150257104
+square.area(5)                      # 25
+triangle.area_sides(3, 4, 5)        # 6.0   (Heron's formula, from the three sides)
+
+# 3D — volume and surface area
+# Surface area splits into .tsa() (total), .csa() (curved only), .lsa() (sides only)
+# Sphere and Torus use plain .surface_area() since there's nothing to disambiguate
+cube.volume(3)                      # 27
+cube.tsa(3)                         # 54   (all 6 faces)
+sphere.volume(3)                    # 113.09733552923254
+cylinder.csa(3, 7)                  # 131.94689145077132   (side only, excludes the two ends)
+cylinder.tsa(3, 7)                  # 188.49555921538757   (side + both ends)
+cone.tsa(3, 4)                      # 75.39822368615503    (slant height computed internally)
+```
+
+**2D shapes:** `circle`, `semicircle`, `square`, `rectangle`, `triangle`, `equilateral_triangle`, `parallelogram`, `rhombus`, `kite`, `trapezoid`, `ellipse`, `polygon`, `sector`, `annulus`
+
+**3D shapes:** `cube`, `cuboid`, `sphere`, `hemisphere`, `cylinder`, `cone`, `frustum`, `pyramid`, `prism`, `torus`
+
 ## Usage — Equations, logs, exponents, roots, trigonometry
 
 ```python
@@ -271,6 +297,30 @@ If more than one DataFrame is loaded, the shortcut can't guess which one you mea
 | `slope(point1, point2)` | Slope between two (x, y) points | No |
 | `centroid(p1, p2, p3)` | Centroid of a triangle from three (x, y) points | No |
 | `dist(point1, point2)` | Distance between two (x, y) points | No |
+| `circle.area/.perimeter(r)` | Area and circumference of a circle | No |
+| `semicircle.area/.perimeter(r)` | Area and perimeter of a semicircle | No |
+| `square.area/.perimeter(s)` | Area and perimeter of a square | No |
+| `rectangle.area/.perimeter(l, w)` | Area and perimeter of a rectangle | No |
+| `triangle.area(base,h)` / `.area_sides(a,b,c)` / `.perimeter(a,b,c)` | Area (from base/height or Heron's formula) and perimeter | No |
+| `equilateral_triangle.area/.perimeter(s)` | Area and perimeter of an equilateral triangle | No |
+| `parallelogram.area(base,h)` / `.perimeter(a,b)` | Area and perimeter of a parallelogram | No |
+| `rhombus.area(d1,d2)` / `.perimeter(s)` | Area (from diagonals) and perimeter of a rhombus | No |
+| `kite.area(d1,d2)` / `.perimeter(a,b)` | Area (from diagonals) and perimeter of a kite | No |
+| `trapezoid.area(a,b,h)` / `.perimeter(a,b,c,d)` | Area and perimeter of a trapezoid | No |
+| `ellipse.area/.perimeter(a,b)` | Area (exact) and perimeter (Ramanujan's approximation) of an ellipse | No |
+| `polygon.area/.perimeter(n_sides, length)` | Area and perimeter of any regular polygon | No |
+| `sector.area(r,angle)` / `.arc_length(r,angle)` | Area and arc length of a circular sector | No |
+| `annulus.area(outer_r, inner_r)` | Area of a ring shape | No |
+| `cube.volume(s)` / `.lsa(s)` / `.tsa(s)` | Volume, lateral and total surface area of a cube | No |
+| `cuboid.volume(l,w,h)` / `.lsa(...)` / `.tsa(...)` | Volume, lateral and total surface area of a cuboid | No |
+| `sphere.volume(r)` / `.surface_area(r)` | Volume and surface area of a sphere | No |
+| `hemisphere.volume(r)` / `.csa(r)` / `.tsa(r)` | Volume, curved and total surface area of a hemisphere | No |
+| `cylinder.volume(r,h)` / `.csa(r,h)` / `.tsa(r,h)` | Volume, curved and total surface area of a cylinder | No |
+| `cone.volume(r,h)` / `.csa(r,h)` / `.tsa(r,h)` | Volume, curved and total surface area of a cone | No |
+| `frustum.volume(r1,r2,h)` / `.csa(...)` / `.tsa(...)` | Volume, curved and total surface area of a frustum | No |
+| `pyramid.volume(s,h)` / `.lsa(s,h)` / `.tsa(s,h)` | Volume, lateral and total surface area of a square pyramid | No |
+| `prism.volume(base_area,h)` / `.lsa(...)` / `.tsa(...)` | Volume, lateral and total surface area of a general prism | No |
+| `torus.volume(R,r)` / `.surface_area(R,r)` | Volume and surface area of a torus | No |
 | `eqn.l(*equations)` | Solves a system of n linear equations in n unknowns | No |
 | `eqn.q(*coeffs)` | Roots of a polynomial of any degree | No |
 | `eqn.q.sum(*coeffs)` / `eqn.q.mul(*coeffs)` | Sum / product of all roots (Vieta's formulas), any degree | No |

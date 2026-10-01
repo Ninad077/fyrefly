@@ -15,6 +15,11 @@ from .quant import (
     eqn, log, exp, nroot, sqrt, curt,
     sin, cos, tan, cosec, sec, cot,
 )
+from .mensuration import (
+    circle, semicircle, square, rectangle, triangle, equilateral_triangle,
+    parallelogram, rhombus, kite, trapezoid, ellipse, polygon, sector, annulus,
+    cube, cuboid, sphere, hemisphere, cylinder, cone, frustum, pyramid, prism, torus,
+)
 
 __all__ = [
     "add", "mul", "div", "mod", "diff",
@@ -29,5 +34,8 @@ __all__ = [
     "hyp", "slope", "centroid", "dist",
     "eqn", "log", "exp", "nroot", "sqrt", "curt",
     "sin", "cos", "tan", "cosec", "sec", "cot",
+    "circle", "semicircle", "square", "rectangle", "triangle", "equilateral_triangle",
+    "parallelogram", "rhombus", "kite", "trapezoid", "ellipse", "polygon", "sector", "annulus",
+    "cube", "cuboid", "sphere", "hemisphere", "cylinder", "cone", "frustum", "pyramid", "prism", "torus",
 ]
-__version__ = "0.6.0"
+__version__ = "0.7.0"
