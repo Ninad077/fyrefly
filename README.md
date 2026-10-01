@@ -2,6 +2,8 @@
 
 A quant-based library to compute mathematical operations, run SQL queries, get AI-powered insights, and visualize your data.
 
+📖 **[Full documentation](https://ninad077.github.io/fyrefly/)**
+
 ## Installation
 
 ```bash

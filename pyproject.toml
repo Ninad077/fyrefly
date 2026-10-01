@@ -36,6 +36,7 @@ classifiers = [
 [project.urls]
 Homepage = "https://github.com/Ninad077/fyrefly"
 Repository = "https://github.com/Ninad077/fyrefly"
+Documentation = "https://ninad077.github.io/fyrefly/"
 
 [project.optional-dependencies]
 dev = ["pytest>=7.0"]
