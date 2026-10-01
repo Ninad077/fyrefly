@@ -109,6 +109,29 @@ sec(60)               # 2.0
 cot(45)               # 1.0
 ```
 
+## Usage — Units, casting & rounding
+
+```python
+from fyrefly import convert, cast, round
+
+# Unit conversion — length, mass, volume, area, time, speed, data, energy, pressure, temperature
+convert(10, "km", "miles")       # 6.213711922373339
+convert(98.6, "F", "C")          # 37.0
+convert(5, "kg", "lb")           # 11.023113109243878
+convert(1, "gb", "mb")           # 1024.0
+
+# Type casting — fixes Python's bool("False") gotcha (which is actually True!)
+cast("123", "int")               # 123
+cast("False", "bool")            # False
+cast("[1, 2, 3]", "list")        # [1, 2, 3]
+cast("2024-01-15", "date")       # date(2024, 1, 15)
+c["age"] = cast(c["age"], "int") # casts an entire DataFrame column
+
+# Rounding — standard round-half-up (like Excel), not Python's banker's rounding
+round(2.5)            # 3   (Python's own round(2.5) gives 2)
+round(1250, -2)       # 1300 (Python's own round(1250, -2) gives 1200)
+```
+
 ## Usage — Data functions
 
 ```python
@@ -127,6 +150,28 @@ xtract(sql("select * from c"), filename="all.csv")  # chained form also works
 ```
 
 **Note:** for Google Sheets, the sheet must be shared as "Anyone with the link – Viewer" for `load()` to access it.
+
+## Usage — Lookups & Excel functions
+
+```python
+from fyrefly import vlook, xlook, countif, sumif, avgif
+
+c = load("employees.csv")
+
+# VLOOKUP — searches the FIRST column, just like Excel
+vlook("Alice", "salary")                  # 85000
+vlook("Alice", "salary", default=0)       # returns 0 instead of raising if not found
+
+# XLOOKUP — searches ANY column you specify
+xlook("Engineering", "department", "name")   # "Alice"
+
+# COUNTIF / SUMIF / AVERAGEIF
+countif("department", "Engineering")              # 3
+sumif("department", "Engineering", "salary")      # 250000
+avgif("department", "Engineering", "salary")      # 83333.33
+```
+
+All five auto-detect your loaded dataset — if you've loaded more than one, pass it explicitly: `vlook("Alice", "salary", df=d)`.
 
 ## Usage — AI functions (require an API key)
 
@@ -231,6 +276,9 @@ If more than one DataFrame is loaded, the shortcut can't guess which one you mea
 | `exp(a, b)` | a raised to the power b (positive or negative) | No |
 | `sqrt(no)` / `curt(no)` / `nroot(no, n)` | Square root / cube root / generic nth root | No |
 | `sin/cos/tan/cosec/sec/cot(angle, mode="deg")` | Trigonometric functions, degrees by default | No |
+| `convert(value, from_unit, to_unit)` | Converts between units within the same category | No |
+| `cast(value, target)` | Casts a value or DataFrame column to another type | No |
+| `round(value, places=0)` | Rounds using standard round-half-up, not banker's rounding | No |
 | `load(path)` | Loads a CSV/Excel/Google Sheet into a DataFrame and previews it | No |
 | `loadh(df)` | Previews just the column headers | No |
 | `loadc(df)` | Previews the record count | No |
@@ -238,6 +286,11 @@ If more than one DataFrame is loaded, the shortcut can't guess which one you mea
 | `sql(query)` | Runs any SQL query against a loaded DataFrame, by variable name | No |
 | `xtract(df, filename=None)` | Exports a DataFrame to CSV in the current directory | No |
 | `clean(df)` | Dedupes, strips whitespace, standardizes column names | No |
+| `vlook(value, return_col, df=None, default=...)` | Searches the first column — like Excel's VLOOKUP | No |
+| `xlook(value, lookup_col, return_col, df=None, default=...)` | Searches any column — like Excel's XLOOKUP | No |
+| `countif(col, value, df=None)` | Counts rows matching a condition | No |
+| `sumif(col, value, sum_col, df=None)` | Sums a column for rows matching a condition | No |
+| `avgif(col, value, avg_col, df=None)` | Averages a column for rows matching a condition | No |
 | `ask(data, question, api_key=...)` | Converts a plain-English question into SQL and runs it | **Yes** |
 | `insights(df, api_key=...)` | Generates a plain-English summary of a dataset | **Yes** |
 | `viz(df, x=None, y=None, kind="auto", ...)` | Visualizes a DataFrame — 12+ chart types | No |

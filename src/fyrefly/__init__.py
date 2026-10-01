@@ -1,9 +1,11 @@
 """A quant-based library for math, SQL-powered data analysis, AI, and visualization."""
 
 from .core import add, mul, div, mod, diff
-from .dataops import load, loadh, loadc, loads, sql, xtract, clean
+from .dataops import load, loadh, loadc, loads, sql, xtract, clean, vlook, xlook, countif, sumif, avgif
 from .ai import ask, insights
 from .viz import viz
+from .units import convert
+from .casting import cast, round
 from .quant import (
     si, ci, si_ci_diff,
     profit, loss,
@@ -16,9 +18,10 @@ from .quant import (
 
 __all__ = [
     "add", "mul", "div", "mod", "diff",
-    "load", "loadh", "loadc", "loads", "sql", "xtract", "clean",
+    "load", "loadh", "loadc", "loads", "sql", "xtract", "clean", "vlook", "xlook", "countif", "sumif", "avgif",
     "ask", "insights",
     "viz",
+    "convert", "cast", "round",
     "si", "ci", "si_ci_diff",
     "profit", "loss",
     "ap", "gp", "hp",
@@ -27,4 +30,4 @@ __all__ = [
     "eqn", "log", "exp", "nroot", "sqrt", "curt",
     "sin", "cos", "tan", "cosec", "sec", "cot",
 ]
-__version__ = "0.5.0"
+__version__ = "0.6.0"

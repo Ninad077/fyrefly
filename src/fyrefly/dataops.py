@@ -180,3 +180,156 @@ def clean(df, lowercase_columns=True, strip_strings=True, drop_duplicates=True, 
         print(f" - Removed {empty_rows_removed} fully empty row(s)")
 
     return df
+
+
+# Internal helper: auto-detects the loaded DataFrame if not passed explicitly
+def _resolve_single_df(df, frame):
+    """Auto-detects the loaded DataFrame if df isn't given explicitly, same
+    pattern used by viz's namespace methods. Requires exactly one DataFrame
+    in scope when df=None."""
+    if df is not None:
+        return df
+    caller_vars = {**frame.f_globals, **frame.f_locals}
+    dfs = {name: val for name, val in caller_vars.items() if isinstance(val, pd.DataFrame)}
+    if len(dfs) == 0:
+        raise ValueError(
+            "No DataFrame found. Load one first with load(), or pass it explicitly: "
+            "vlook(value, return_col, df=your_df)"
+        )
+    if len(dfs) > 1:
+        names = ", ".join(dfs.keys())
+        raise ValueError(
+            f"Multiple DataFrames found ({names}) — can't tell which to use. "
+            f"Pass it explicitly: vlook(value, return_col, df=your_df)"
+        )
+    return next(iter(dfs.values()))
+
+
+# Internal helper: resolves a column by name or position
+def _get_column(df, col):
+    """Resolves a column by name (string) or position (int), Excel-style."""
+    if isinstance(col, int):
+        return df.columns[col]
+    return col
+
+
+# Looks up a value in the first column, like Excel's VLOOKUP
+def vlook(value, return_col, df=None, default="__RAISE__"):
+    """
+    Looks up `value` in the FIRST column of your data (like Excel's VLOOKUP)
+    and returns the matching row's value from `return_col`.
+
+    return_col can be a column name (string) or a 0-based column index (int).
+
+    If exactly one DataFrame is loaded, df is auto-detected — no need to
+    pass it. If you've loaded more than one, pass it explicitly: df=your_df.
+
+    Raises a clear error if `value` isn't found, unless you pass default=...,
+    in which case that's returned instead.
+
+    Example:
+        c = load("employees.csv")
+        vlook("Alice", "salary")              # finds "Alice" in column 1
+        vlook("Alice", "salary", default=0)   # returns 0 if not found
+    """
+    frame = inspect.currentframe().f_back
+    df = _resolve_single_df(df, frame)
+
+    lookup_col = df.columns[0]
+    return_col_name = _get_column(df, return_col)
+
+    matches = df[df[lookup_col] == value]
+    if matches.empty:
+        if default != "__RAISE__":
+            return default
+        raise ValueError(f"Value '{value}' not found in column '{lookup_col}'")
+    return matches.iloc[0][return_col_name]
+
+
+# Looks up a value in ANY column, like Excel's XLOOKUP
+def xlook(value, lookup_col, return_col, df=None, default="__RAISE__"):
+    """
+    Looks up `value` in ANY column you specify (like Excel's XLOOKUP) and
+    returns the matching row's value from `return_col`.
+
+    lookup_col and return_col can be column names (strings) or 0-based
+    column indices (ints).
+
+    If exactly one DataFrame is loaded, df is auto-detected — no need to
+    pass it. If you've loaded more than one, pass it explicitly: df=your_df.
+
+    Raises a clear error if `value` isn't found, unless you pass default=...,
+    in which case that's returned instead.
+
+    Example:
+        c = load("employees.csv")
+        xlook("Alice", "name", "salary")              # lookup column can be anywhere
+        xlook("Alice", "name", "salary", default=0)   # returns 0 if not found
+    """
+    frame = inspect.currentframe().f_back
+    df = _resolve_single_df(df, frame)
+
+    lookup_col_name = _get_column(df, lookup_col)
+    return_col_name = _get_column(df, return_col)
+
+    matches = df[df[lookup_col_name] == value]
+    if matches.empty:
+        if default != "__RAISE__":
+            return default
+        raise ValueError(f"Value '{value}' not found in column '{lookup_col_name}'")
+    return matches.iloc[0][return_col_name]
+
+
+# Counts rows matching a condition, like Excel's COUNTIF
+def countif(col, value, df=None):
+    """
+    Counts rows where `col` equals `value` — like Excel's COUNTIF.
+
+    If exactly one DataFrame is loaded, df is auto-detected. If you've
+    loaded more than one, pass it explicitly: df=your_df.
+
+    Example:
+        c = load("employees.csv")
+        countif("department", "Engineering")   # how many rows match
+    """
+    frame = inspect.currentframe().f_back
+    df = _resolve_single_df(df, frame)
+    return int((df[col] == value).sum())
+
+
+# Sums a column for rows matching a condition, like Excel's SUMIF
+def sumif(col, value, sum_col, df=None):
+    """
+    Sums `sum_col` for rows where `col` equals `value` — like Excel's SUMIF.
+
+    If exactly one DataFrame is loaded, df is auto-detected. If you've
+    loaded more than one, pass it explicitly: df=your_df.
+
+    Example:
+        c = load("employees.csv")
+        sumif("department", "Engineering", "salary")   # total salary for that department
+    """
+    frame = inspect.currentframe().f_back
+    df = _resolve_single_df(df, frame)
+    return df.loc[df[col] == value, sum_col].sum()
+
+
+# Averages a column for rows matching a condition, like Excel's AVERAGEIF
+def avgif(col, value, avg_col, df=None):
+    """
+    Averages `avg_col` for rows where `col` equals `value` — like Excel's
+    AVERAGEIF.
+
+    If exactly one DataFrame is loaded, df is auto-detected. If you've
+    loaded more than one, pass it explicitly: df=your_df.
+
+    Example:
+        c = load("employees.csv")
+        avgif("department", "Engineering", "salary")   # average salary for that department
+    """
+    frame = inspect.currentframe().f_back
+    df = _resolve_single_df(df, frame)
+    matches = df.loc[df[col] == value, avg_col]
+    if matches.empty:
+        raise ValueError(f"No rows found where '{col}' equals '{value}'")
+    return matches.mean()
