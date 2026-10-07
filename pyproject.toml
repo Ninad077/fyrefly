@@ -4,15 +4,15 @@ build-backend = "hatchling.build"
 
 [project]
 name = "fyrefly"
-version = "0.7.0"
-description = "A quant-based library to compute mathematical operations, run SQL queries, get AI-powered insights, and visualize your data."
+version = "0.10.0"
+description = "A quant-based library to compute mathematical operations, run SQL queries, get AI-powered insights, visualize your data, and test APIs."
 readme = "README.md"
 requires-python = ">=3.9"
 license = { text = "MIT" }
 authors = [
     { name = "Ninad Mandavkar", email = "ninadmandavkar28@gmail.com" }
 ]
-keywords = ["math", "arithmetic", "quant", "utility", "sql", "pandas", "ai", "visualization"]
+keywords = ["math", "arithmetic", "quant", "utility", "sql", "pandas", "ai", "visualization", "api", "testing", "http", "postman", "rest"]
 dependencies = [
     "pandas",
     "numpy",
@@ -31,6 +31,8 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Testing",
 ]
 
 [project.urls]

@@ -1,9 +1,10 @@
-"""A quant-based library for math, SQL-powered data analysis, AI, and visualization."""
+"""A quant-based library for math, SQL-powered data analysis, AI, visualization, and API testing."""
 
 from .core import add, mul, div, mod, diff
 from .dataops import load, loadh, loadc, loads, sql, xtract, clean, vlook, xlook, countif, sumif, avgif
 from .ai import ask, insights
 from .viz import viz
+from .api import api
 from .units import convert
 from .casting import cast, round
 from .quant import (
@@ -26,6 +27,7 @@ __all__ = [
     "load", "loadh", "loadc", "loads", "sql", "xtract", "clean", "vlook", "xlook", "countif", "sumif", "avgif",
     "ask", "insights",
     "viz",
+    "api", 
     "convert", "cast", "round",
     "si", "ci", "si_ci_diff",
     "profit", "loss",
@@ -38,4 +40,4 @@ __all__ = [
     "parallelogram", "rhombus", "kite", "trapezoid", "ellipse", "polygon", "sector", "annulus",
     "cube", "cuboid", "sphere", "hemisphere", "cylinder", "cone", "frustum", "pyramid", "prism", "torus",
 ]
-__version__ = "0.7.0"
+__version__ = "0.10.0"

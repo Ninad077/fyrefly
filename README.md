@@ -1,6 +1,6 @@
 # Fyrefly
 
-A quant-based library to compute mathematical operations, run SQL queries, get AI-powered insights, and visualize your data.
+A quant-based library to compute mathematical operations, run SQL queries, get AI-powered insights, visualize your data, and test APIs.
 
 📖 **[Full documentation](https://ninad077.github.io/fyrefly/)**
 
@@ -272,6 +272,42 @@ viz.pairplot(hue="department")   # no columns needed
 
 If more than one DataFrame is loaded, the shortcut can't guess which one you mean — pass it explicitly as the first argument instead: `viz.bar(c, "department", "salary")`.
 
+## Usage — API testing (no API key needed)
+
+One function, `api.gui()`, opens a free Postman-style window in your browser. Build a request, press **Send**, and read a plain-English answer.
+
+```python
+from fyrefly import api
+
+api.gui()                                            # opens the window
+api.gui("https://api.example.com/users", method="post",
+        send="name=Asha, age=30", token="YOUR_TOKEN")  # opens it already filled in
+```
+
+It covers what you do every day:
+
+- **Request tabs, Params, Authorization, Headers, Body.** The body can be JSON, form-data with file upload, a plain web form, or text/XML. Every row has an on/off checkbox. Ctrl+Enter sends, Ctrl+S saves.
+- **Collections.** Save requests into collections and folders, reopen them from the sidebar, copy, rename, delete, and run a whole collection in order with a pass/fail table.
+- **Environments.** UAT, SIT, Prod... each a named set of variables, switched from a dropdown. Use them as `{{HOST}}` anywhere. Built in: `{{$guid}}`, `{{$timestamp}}`, `{{$isoTimestamp}}`, `{{$randomInt}}`.
+- **Secrets stay secret.** Mark a variable as secret and it is hidden on screen and stored in a separate `secrets.json` (owner-only, listed in `.gitignore`). A token typed straight into a request is *not* written to the saved file, so collections are safe to share.
+- **Save to variable.** Log in once, and the token is copied from the answer into `{{TOKEN}}` for every later request. Click "to var" next to any value in the Preview tab, or set it up in the "Save to variable" tab.
+- **Import and export.** Import a Postman collection (v2.x), a Postman environment, or a pasted `curl` command. Export a collection as Postman JSON.
+- **The answer.** Status, time and size, then: a plain-English **Report** (when something fails, a HOW TO FIX IT list says what is missing and which tab to fix it in), the **Body** with colored JSON, a find box and a Download button, a collapsible **Preview** (JSON tree, HTML in a locked box, or an image), a **Table**, the **Headers** with any redirects followed, and the **Request** as a curl command.
+- **Settings.** Check SSL certificates on or off (for internal servers), follow redirects, a proxy, a default timeout, cookies that persist between calls, and a history of what you sent (tokens never kept).
+
+Your work lives in one plain folder, `~/fyrefly_api`, created for you the first time (choose another with `api.gui(folder="...")`, or `folder=False` to save nothing):
+
+```
+~/fyrefly_api/
+  collections/Shop API.json      requests, safe to share or commit
+  environments/UAT.json          variables; secret values are blank here
+  secrets.json                   the secret values (not shared, in .gitignore)
+  history.json  settings.json
+```
+
+The window runs only on your computer: it is served from `127.0.0.1`, behind a one-time secret in the address, and loads nothing from the internet.
+Click **Quit** (or press Ctrl+C) to close it. In a notebook, `api.gui()` returns at once and `window.stop()` closes it.
+
 ## Functions
 
 | Function | Description | Needs API key? |
@@ -347,12 +383,13 @@ If more than one DataFrame is loaded, the shortcut can't guess which one you mea
 | `insights(df, api_key=...)` | Generates a plain-English summary of a dataset | **Yes** |
 | `viz(df, x=None, y=None, kind="auto", ...)` | Visualizes a DataFrame — 12+ chart types | No |
 | `viz.bar/.scatter/.line/.box/.violin/.hist/.kde/.pie/.heatmap/.pairplot` | Namespace shortcuts for each chart type — auto-detect the loaded DataFrame | No |
+| `api.gui(url=None, method="get", send=None, headers=None, token=None, ...)` | Opens a free Postman-style window in your browser: collections, environments, secrets, import/export | No |
 
 ## Development
 
 ```bash
 pip install -e ".[dev]"
-pytest
+pytest          # includes the API tests, which use a local test server
 ```
 
 ## License
