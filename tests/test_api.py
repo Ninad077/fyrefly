@@ -1926,3 +1926,21 @@ def test_window_shows_no_python_calls(server):
         d = _apigui.run_payload(api, threading.RLock(), payload, ws)
         text = (d.get("report") or "") + (d.get("error") or "")
         assert "api." not in text and "Try:" not in text, text
+
+
+def test_script_window_waits_even_if_ipykernel_is_imported(monkeypatch, tmp_path):
+    """A plain terminal with ipykernel merely loaded must still keep the window alive."""
+    import sys, types
+    monkeypatch.setitem(sys.modules, "ipykernel", types.ModuleType("ipykernel"))
+    assert _apigui._in_notebook() is False
+    seen = {}
+
+    class Fake:
+        url = "http://127.0.0.1:1/?t=x"
+
+        def wait(self):
+            seen["waited"] = True
+
+    monkeypatch.setattr(_apigui.GuiServer, "start", lambda self: Fake())
+    _apigui.serve(api, None, 0, False, None, False)
+    assert seen.get("waited") is True

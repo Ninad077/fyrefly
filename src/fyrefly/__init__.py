@@ -40,4 +40,4 @@ __all__ = [
     "parallelogram", "rhombus", "kite", "trapezoid", "ellipse", "polygon", "sector", "annulus",
     "cube", "cuboid", "sphere", "hemisphere", "cylinder", "cone", "frustum", "pyramid", "prism", "torus",
 ]
-__version__ = "0.10.0"
+__version__ = "0.10.1"

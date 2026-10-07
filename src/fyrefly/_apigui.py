@@ -539,6 +539,16 @@ def handle_op(server, d):
         return {"error": str(e)}
 
 
+def _in_notebook():
+    """True only inside a real Jupyter notebook kernel. Merely having ipykernel installed or imported does not count."""
+    try:
+        from IPython import get_ipython
+        ip = get_ipython()
+        return ip is not None and ip.__class__.__name__ == "ZMQInteractiveShell"
+    except Exception:  # noqa
+        return False
+
+
 def serve(api, preset=None, port=0, open_browser=True, block=None, folder=None):
     if folder is False:
         ws = _apistore.Workspace(None)
@@ -554,7 +564,7 @@ def serve(api, preset=None, port=0, open_browser=True, block=None, folder=None):
         except Exception:  # noqa
             pass
     if block is None:
-        block = "ipykernel" not in sys.modules
+        block = not _in_notebook()
     if block:
         print("Click Quit in the window, or press Ctrl+C here, to close it.")
         server.wait()
